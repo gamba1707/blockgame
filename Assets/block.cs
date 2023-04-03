@@ -7,7 +7,7 @@ public class block : MonoBehaviour
 {
     private MeshRenderer m_Renderer;
     //生成させることが出来るか（上にブロックがある場合false）
-    private bool pointer;
+    [SerializeField] private bool pointer = true;
     //通常時の床と選択時のマテリアル
     [SerializeField] Material[] blockmaterials = new Material[3];
     //プレハブのブロック
@@ -17,7 +17,7 @@ public class block : MonoBehaviour
     void Start()
     {
         m_Renderer= GetComponent<MeshRenderer>();
-        pointer= true;
+        //pointer = true;
     }
 
     // Update is called once per frame
@@ -46,10 +46,12 @@ public class block : MonoBehaviour
 
     public void OnPointerClick(BaseEventData data)
     {
-        GameObject pointerObject = (data as PointerEventData).pointerClick;
-        pointer= false;
-        m_Renderer.material = blockmaterials[2];
-        Instantiate(cubeObject, pointerObject.transform.position, Quaternion.identity);
-        
+        if (pointer)
+        {
+            GameObject pointerObject = (data as PointerEventData).pointerClick;
+            Instantiate(cubeObject, pointerObject.transform.position, Quaternion.identity);
+            m_Renderer.material = blockmaterials[2];
+            pointer = false;
+        }
     }
 }

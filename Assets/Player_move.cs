@@ -15,7 +15,8 @@ public class Player_move : MonoBehaviour
     private Vector3 cameraForward = Vector3.zero;
     private static float x, y;
     [SerializeField] private float speed=5F;
-        // Start is called before the first frame update
+    private float gravity = 5f;
+    // Start is called before the first frame update
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -41,9 +42,24 @@ public class Player_move : MonoBehaviour
         moveDirection = transform.TransformDirection(moveDirection);
         //“®‚¢‚Ä‚¢‚é‚Æ‚«‚Íí‚É‰Ÿ‚³‚ê‚Ä‚¢‚é•ûŒü‚ğŒü‚¢‚Ä‚Ù‚µ‚¢
         if (x != 0 || y != 0) Player_t.transform.localRotation = Quaternion.LookRotation(cameraForward * y + maincamera.transform.right * x);
+        moveDirection.y -=gravity;
+
+        Debug.Log(moveDirection.y);
         //ÅI“I‚É“®‚©‚·
         controller.Move(moveDirection * Time.deltaTime);
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("trampoline"))
+        {
+            moveDirection.y = 50f;
+            moveDirection.y = 50f;
+            moveDirection.y = 50f;
+            Debug.Log("kiffnsofo");
+            
+        }
+        
     }
 
 }
