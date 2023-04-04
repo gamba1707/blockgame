@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 public class block : MonoBehaviour
 {
     private MeshRenderer m_Renderer;
+    private Animator anim;
     //生成させることが出来るか（上にブロックがある場合false）
     [SerializeField] private bool pointer = true;
     //通常時の床と選択時のマテリアル
@@ -17,7 +18,7 @@ public class block : MonoBehaviour
     void Start()
     {
         m_Renderer= GetComponent<MeshRenderer>();
-        //pointer = true;
+        anim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -49,9 +50,43 @@ public class block : MonoBehaviour
         if (pointer)
         {
             GameObject pointerObject = (data as PointerEventData).pointerClick;
-            Instantiate(cubeObject, pointerObject.transform.position, Quaternion.identity);
-            m_Renderer.material = blockmaterials[2];
-            pointer = false;
+
+            switch ((data as PointerEventData).pointerId)
+            {
+                case -1:
+                    Debug.Log("Left Click");
+                    Instantiate(cubeObject, pointerObject.transform.position, Quaternion.identity);
+                    m_Renderer.material = blockmaterials[2];
+                    GameManager.I.Block_move=true;
+                    pointer = false;
+                    break;
+                case -2:
+                    Debug.Log("Right Click");
+                    Ray ray = new Ray(transform.position, -transform.up);
+                    Debug.DrawRay(transform.position, -transform.up * 1.0f, Color.red);
+                    RaycastHit hit;
+                    if (Physics.Raycast(ray, out hit, 1.0f))
+                    {
+                        Debug.Log(hit.collider.gameObject);
+                        anim.SetTrigger("down");
+                        GameManager.I.Block_move = true;
+                        hit.collider.gameObject.SetActive(false);
+                    }
+                    break;
+                case -3:
+                    Debug.Log("Middle Click");
+                    break;
+            }
+            
         }
+    }
+
+    //計算の誤差で正常な位置に戻らないことがあるためアニメーション終了時に一応修正
+    IEnumerator adjust()
+    {
+        yield return new WaitForSeconds(0.02f);
+        GameManager.I.Block_move = false;
+        gameObject.transform.position=new Vector3(transform.position.x, Mathf.Round(transform.position.y*100.0f)/100.0f,transform.position.z);
+        Debug.Log(transform.position);
     }
 }
