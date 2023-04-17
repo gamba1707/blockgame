@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     [Header("ブロックの状態")]
     [SerializeField] private bool block_move;
 
+
     
 
     //ゲーム開始直後に処理を行う
