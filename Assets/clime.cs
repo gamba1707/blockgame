@@ -28,8 +28,8 @@ public class clime : MonoBehaviour
         if (other.gameObject.CompareTag("cube"))
         {
             blockpos=other.transform.position;
-            Ray ray = new Ray(new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z), transform.forward);
-            Debug.DrawRay(new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z), transform.forward * 1.0f, Color.red);
+            Ray ray = new Ray(new Vector3(transform.position.x, transform.position.y + 1.8f, transform.position.z), transform.forward);
+            Debug.DrawRay(new Vector3(transform.position.x, transform.position.y + 1.8f, transform.position.z), transform.forward * 1.0f, Color.red);
             RaycastHit hit;
             if (!Physics.Raycast(ray, out hit, 1.0f))
             {
