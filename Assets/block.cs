@@ -11,6 +11,8 @@ public class block : MonoBehaviour
     [SerializeField] private bool onpointer=false;
     //生成させることが出来るか（上にブロックがある場合false）
     [SerializeField] private bool addblock = true;
+    //上にプレイヤーがいるか
+    [SerializeField] private bool onPlayer = false;
     //通常時の床と選択時のマテリアル(灰色、青、赤)
     [SerializeField] Material[] blockmaterials = new Material[3];
     //プレハブのブロック
@@ -37,7 +39,7 @@ public class block : MonoBehaviour
         Debug.Log(pointerObject.gameObject.name);
         Debug.Log(addblock);
         //上に置ける場合は青、置けない場合は赤
-        if(addblock) m_Renderer.material = blockmaterials[1];
+        if(addblock && !onPlayer) m_Renderer.material = blockmaterials[1];
         else m_Renderer.material = blockmaterials[2];
     }
 
@@ -53,7 +55,7 @@ public class block : MonoBehaviour
     public void OnPointerClick(BaseEventData data)
     {
         //箱を出現させることが出来る箱である＆＆ブロックが動いている途中ではない
-        if (addblock && !GameManager.I.Block_move)
+        if (addblock &&!onPlayer&& !GameManager.I.Block_move)
         {
             GameObject pointerObject = (data as PointerEventData).pointerClick;
 
@@ -62,6 +64,7 @@ public class block : MonoBehaviour
                 case -1:
                     //左クリック処理
                     Debug.Log("Left Click");
+                    GameManager.I.Count++;//ブロック数加算
                     Instantiate(cubeObject, pointerObject.transform.position, Quaternion.identity);
                     m_Renderer.material = blockmaterials[2];
                     GameManager.I.Block_move=true;//マネージャーにブロックが動いている最中だと知らせる
@@ -70,6 +73,7 @@ public class block : MonoBehaviour
                 case -2:
                     //右クリック処理
                     Debug.Log("Right Click");
+                    GameManager.I.Count++;//ブロック数加算
                     Ray ray = new Ray(transform.position, -transform.up);
                     Debug.DrawRay(transform.position, -transform.up * 1.0f, Color.red);
                     RaycastHit hit;
@@ -111,13 +115,13 @@ public class block : MonoBehaviour
     public void OnPlayerEnter()
     {
         Debug.Log("false: "+this.gameObject.name);
-        addblock = false;
+        onPlayer = true;
         if(onpointer) m_Renderer.material = blockmaterials[2];
     }
     public void OnPlayerExit()
     {
         Debug.Log("true: " + this.gameObject.name);
-        addblock = true;
+        onPlayer = false;
         if (onpointer) m_Renderer.material = blockmaterials[1]; 
     }
 }

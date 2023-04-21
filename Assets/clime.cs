@@ -20,7 +20,7 @@ public class clime : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.DrawRay(new Vector3(transform.position.x, transform.position.y + 1.8f, transform.position.z), transform.forward * 1.0f, Color.red);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -53,9 +53,8 @@ public class clime : MonoBehaviour
         //駆け上がるまで繰り返す（補完待ち）
         while (f <= 1.0f)
         {
-            Debug.Log("?");
             transform.root.position = Vector3.Slerp(startpos, endpos, f);
-            f += 0.01f;
+            f += 0.025f;
             yield return null;  
         }
         /*子オブジェクトの座標を登るときだけ変換させて登り切った後に

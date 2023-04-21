@@ -16,7 +16,7 @@ public class Player_move : MonoBehaviour
     private Vector3 cameraForward = Vector3.zero;
     private static float x, y;
     [SerializeField] private float speed=5F;
-    private float gravity= -0.5f;
+    private float gravity= -0.98f;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +31,7 @@ public class Player_move : MonoBehaviour
     {
         //入力値
         x = Input.GetAxis("Horizontal");    //左右矢印キーの値(-1.0~1.0)
-        y = Input.GetAxis("Vertical");      //上下矢印キーの値(-1.0~1.0)
+        //y = Input.GetAxis("Vertical");      //上下矢印キーの値(-1.0~1.0)
         //アニメーション
         if (x != 0 || y != 0) anim.SetBool("walk", true);
         else anim.SetBool("walk", false);

@@ -9,9 +9,10 @@ public class GameManager : MonoBehaviour
 
     [Header("ブロックの状態")]
     [SerializeField] private bool block_move;
+    [Header("歩数")]
+    [SerializeField] private int count;
 
 
-    
 
     //ゲーム開始直後に処理を行う
     private void Awake()
@@ -28,6 +29,12 @@ public class GameManager : MonoBehaviour
     {
         get { return block_move; }  // 通称ゲッター。呼び出した側がscoreを参照できる
         set { block_move = value; } // 通称セッター。value はセットする側の数字などを反映する
+    }
+
+    public int Count
+    {
+        get { return count; }
+        set {  count = value; }
     }
 
     // Start is called before the first frame update
